@@ -3,7 +3,21 @@ let balance = document.querySelector(".balance");
 let displayText = document.querySelector(".display-text");
 let progressBar = document.querySelector(".progress-bar");
 let coffeeCup = document.querySelector(".coffee-cup img");
+
 let coffeeStatus = "waiting"; //"cooking" "ready"
+
+coffeeCup.onclick = takeCoffee; //1 способ вызова
+
+/*coffeeCup.onclick = function() {  //2 способ вызова
+  takeCoffee(this);
+}
+
+coffeeCup.addEventListener("click", takeCoffee, par1) //3 способ вызова
+coffeeCup.addEventListener("click", () => {
+  takeCoffee;                                    //4 способ вызова
+})
+
+coffeeCup.AddEventListener("click", buyCoffee, "Американо", 50);*/
 
 function buyCoffee(name, cost, elem) {
     if (coffeeStatus != "waiting") {
@@ -48,6 +62,17 @@ coffeeCup.classList.remove("d-none");//убрать класс
       clearInterval(cookingInterval);
     }
   }, 75);
+}
+
+function takeCoffee() {
+  if (coffeeStatus != "ready") {
+    return;
+  }
+  coffeeStatus = "waiting";
+  coffeeCup.classList.add("d-none");
+  coffeeCup.style.cursor = "auto";
+  progressBar.style.width = "0%";
+  changeDisplayText("Выберите кофе");
 }
 
 function changeDisplayText(text) {
