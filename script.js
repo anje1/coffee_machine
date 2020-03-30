@@ -135,9 +135,108 @@ function takeMoney(event) {
 
 function dropMoney() {
   window.onmousemove = null;
+  
+  let bill = this;
+  let billCost = bill.getAttribute("cost");
+  
+  if (inAtm(bill)) {
+    balance.value = +balance.value + +billCost
+    bill.remove();
+  }
 }
 
+function inAtm(bill) {
+  let billCoord = bill.getBoundingClientRect();
+  let atm = document.querySelector(".atm");
+  let atmCoord = atm.getBoundingClientRect();
+  
+  let billLeftTopCornerX = billCoord.x;
+  let billLeftTopCornerY = billCoord.y;
+  
+  let billRightTopCornerX = billCoord.x + billCoord.width;
+  let billRightTopCornerY = billCoord.y;
+  
+  let atmLeftTopCornerX = atmCoord.x;
+  let atmLeftTopCornerY = atmCoord.y;
+  
+  let atmRightTopCornerX = atmCoord.x + atmCoord.width;
+  let atmRightTopCornerY = atmCoord.y;
+  
+  let atmLeftBottomCornerX = atmCoord.x;
+  let atmLeftBottomCornerY = atmCoord.y + atmCoord.height/3;
+  
+  let atmRightBottomCornerX = atmCoord.x + atmCoord.width;
+  let atmRightBottomCornerY = atmCoord.y + atmCoord.height/3;
+  
+  if (
+    billLeftTopCornerX >= atmLeftTopCornerX
+    && billLeftTopCornerY >= atmLeftTopCornerY
+    && billRightTopCornerX <= atmRightTopCornerX
+    && billRightTopCornerY >= atmRightTopCornerY
+    
+    && billLeftTopCornerX >= atmLeftBottomCornerX
+    && billLeftTopCornerY <= atmLeftBottomCornerY
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+}
 
+//-------------------------------Сдача----------------------
+
+let changeBtn = document.querySelector(".change");
+changeBtn.onclick = takeChange;
+
+function takeChange() {
+  tossCoin("10");
+}
+
+function tossCoin(cost) {
+  let changeContainer = document.querySelector(".change-box")
+  let changeContainerCoords = changeContainer.getBoundingClientRect();
+  
+  let coinSrc = "";
+  
+  switch (cost) {
+    case "10":
+      coinSrc = "img/10rub.png";
+      break;
+    case "5":
+      coinSrc = "img/5rub.png";
+      break;
+    case "2":
+      coinSrc = "img/2rub.png";
+      break;
+    case "1":
+      coinSrc = "img/1rub.png";
+      break;
+  }
+  
+/*  changeContainer.innerHTML += `
+    <img src="${coinSrc}" style="height: 50px">  ----1 способ
+  `*/
+  
+  let coin = document.createElement("img");
+  coin.setAttribute("src", coinSrc);
+  coin.style.height = "50px";
+  coin.style.cursor = "pointer";
+  coin.style.display = "inline-block";
+  coin.style.position = "absolute";
+  
+  changeContainer.append(coin); //Прикрепить после внутри эл.
+/*  changeContainer.prepend(coin); //Прикрепить до внутри эл.
+  
+  changeContainer.after(coin); //после контейнера
+  changeContainer.before(coin); //перед контейнером
+  
+  changeContainer.replace(coin); //заменяет элементы*/
+  coin.style.top = Math.round(Math.random() * (changeContainerCoords.height - 50)) + "px";
+  coin.style.left = Math.round(Math.random() * (changeContainerCoords.width - 50)) + "px";
+  
+  coin.onclick = () => coin.remove();
+  
+}
 
 
 
