@@ -189,7 +189,36 @@ let changeBtn = document.querySelector(".change");
 changeBtn.onclick = takeChange;
 
 function takeChange() {
-  tossCoin("10");
+  if (balance.value <= 0) {
+    changeBtn.onclick = takeChange;
+    return;
+  }
+  changeBtn.onclick = null;
+  if (balance.value - 10 >= 0) {
+    setTimeout(() => {
+      tossCoin("10");
+      balance.value -=10;
+      return takeChange();
+    }, 300);
+  } else if (balance.value - 5 >= 0) {
+    setTimeout(() => {
+      tossCoin("5");
+      balance.value -= 5;
+      return takeChange();
+    }, 300);
+  } else if (balance.value - 2 >= 0) {
+    setTimeout(() => {
+      tossCoin("2");
+      balance.value -= 2;
+      return takeChange();
+    }, 300);
+  } else if (balance.value - 1 >= 0) {
+    setTimeout(() => {
+      tossCoin("1");
+      balance.value -= 1;
+      return takeChange();
+    }, 300);
+  }
 }
 
 function tossCoin(cost) {
@@ -235,6 +264,9 @@ function tossCoin(cost) {
   coin.style.left = Math.round(Math.random() * (changeContainerCoords.width - 50)) + "px";
   
   coin.onclick = () => coin.remove();
+  
+  let coinSound = new Audio("sound/00923.mp3");
+  coinSound.play();
   
 }
 
